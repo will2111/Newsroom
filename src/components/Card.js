@@ -21,7 +21,7 @@ function NewsCard(props) {
 
       <Card.Body>
 
-        <Card.Title className='fs-4 fw-600 py-1' >{props.obj.title}</Card.Title>
+        <Card.Title className='noticia fs-4 py-1' >{props.obj.title}</Card.Title>
 
         <Card.Text className='crop-text-2' >
           {props.obj.description}
