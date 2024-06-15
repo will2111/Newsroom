@@ -63,7 +63,7 @@ export default function NewsHeadBoard() {
                 </Col>
                 <Col xs={6} md={5}>
                     {articles && (
-                        <NewsCard obj={articles[2]} />
+                        <NewsCard obj={articles[8]} />
                     )}
                 </Col>
             </Row>

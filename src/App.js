@@ -39,6 +39,8 @@ function App() {
 
   const { articles } = data;
 
+  const fil_art = articles.filter((article) => article.urlToImage);
+
   return (
     <Container className='p-0 bg_main' fluid>
 
@@ -56,9 +58,9 @@ function App() {
                   <Card.Img variant="top" className='rounded-0' src={articles[0].urlToImage} />
 
                 )}
-                <Card.Body >
+                <Card.Body className='py-3 dark bg-dark' >
 
-                  <Card.Title className='fs-4 fw-600 m-0' >{"PALESTINE"}</Card.Title>
+                  <Card.Title className='text-white fs-4 fw-500 m-0' >{"Palestine"}</Card.Title>
                 </Card.Body>
               </Card>
             </Container>
@@ -71,9 +73,9 @@ function App() {
                   <Card.Img variant="top" className='rounded-0' src={articles[7].urlToImage} />
 
                 )}
-                <Card.Body >
+                <Card.Body className='py-3 dark bg-dark' >
 
-                  <Card.Title className='fs-4 fw-600 m-0' >{"CONGO"}</Card.Title>
+                  <Card.Title className='text-white fs-4 fw-500 m-0' >{"Congo"}</Card.Title>
                 </Card.Body>
               </Card>
             </Container>
@@ -87,7 +89,7 @@ function App() {
 
           <Container className='p-0'>
 
-            <Navbar bg="border bor_bot_color bg_main" data-bs-theme="light">
+            {/*<Navbar bg="border bor_bot_color bg_main" data-bs-theme="light">
               <Container className='py-3 px-4' >
                 <div className='dark bg-dark px-2 me-3'>
                   <h1 className='text-white m-0'>
@@ -104,7 +106,7 @@ function App() {
                   </Nav>
                 </Navbar.Collapse>
               </Container>
-            </Navbar>
+            </Navbar>*/}
 
             <Container className='h-75 px-4' >
 
@@ -112,17 +114,17 @@ function App() {
 
                 <Row className='p-0 justify-content-center'  >
                   <Col className='pe-0' md={"auto"}>
-                    <div className='p-2 pr-1'>
+                    <div className='p-2 px-1'>
                       <h1 className='display-5 m-0'>
-                        Latest
+                        News
                       </h1>
                     </div>
                   </Col>
 
-                  <Col className='pl-1' md={"auto"}>
-                    <div className='dark bg-dark p-2 '>
-                      <h1 className='text-white display-5 fw-bold m-0'>
-                        News
+                  <Col className='p-0' md={"auto"}>
+                    <div className='dark bg-dark p-2 pl-1'>
+                      <h1 className='text-white display-5 m-0'>
+                        Board
                       </h1>
                     </div>
                   </Col>
@@ -152,7 +154,7 @@ function App() {
               </Col>
 
 
-              <NewsList articles={articles} />
+              <NewsList articles={fil_art} />
 
 
             </Container>
