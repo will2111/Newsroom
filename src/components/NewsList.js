@@ -1,14 +1,9 @@
+import React from 'react';
 
-import React, { useState, useEffect } from 'react';
-import { useQuery } from 'react-query';
-
-import NewsCard from './Card.js';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
 import Stackcard from './Stack_card.js';
-
-
 
 /*
 "source": {
@@ -25,11 +20,8 @@ import Stackcard from './Stack_card.js';
  */
 
 function NewsList(props) {
-    
-    
-    
+        
     return (
-
 
         <Col className='h-100 py-4' >
 
@@ -37,7 +29,7 @@ function NewsList(props) {
 
                 {Array.from({ length: 3 }).map((_, idx) => (
                     <Col key={idx}>
-                        <Stackcard articles={props.articles} i_line={idx} />
+                        <Stackcard articles={props.articles.filter((_,index) => index % 3 === idx  )} i_line={idx} />
                     </Col>
                 )
                 )}

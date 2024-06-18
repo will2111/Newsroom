@@ -1,45 +1,54 @@
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useEffect, useState } from 'react';
 
-
-import { QueryClient, QueryClientProvider, useQuery } from 'react-query';
+import { useQuery } from 'react-query';
 
 import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
-import { Button, Card, Nav, Navbar } from 'react-bootstrap';
-
-import Stackcard from './components/Stack_card.js';
-import { Hearts, Newspaper } from 'react-bootstrap-icons';
-import NavButton from './components/NavButton.js';
+import { Button, Card} from 'react-bootstrap';
 
 import NewsHeadBoard from './components/NewsHeadBoard.js';
 import NewsList from './components/NewsList.js';
-import NewsCard from './components/Card.js';
-
-
+import SoloCard from './components/SoloCard.js';
+import Switch_Api from './components/Switch_Api.js';
 
 
 function App() {
 
-  const { isLoading, error, data, status } = useQuery('ad3aa392a85b4007a3d4c225c5c6177e', () =>
-    fetch('https://newsapi.org/v2/top-headlines?country=us&apiKey=ad3aa392a85b4007a3d4c225c5c6177e').then(res =>
-      res.json()
+  {/*
+    const { isLoading, error, data } = useQuery('aa18990c882cc815ef226c7b1ae21bbb', () =>
+    fetch('https://gnews.io/api/v4/top-headlines?category=general&lang=en&country=us&max=10&apikey=aa18990c882cc815ef226c7b1ae21bbb').then(res =>
+        res.json()
     )
-  );
+  */}
+ 
+  const API_KEY = Switch_Api() ? 'aa18990c882cc815ef226c7b1ae21bbb' : 'ad3aa392a85b4007a3d4c225c5c6177e'
+  const TOP_ENDPOINT = Switch_Api() ? 
+  'https://gnews.io/api/v4/top-headlines?category=general&lang=en&country=us&max=10&apikey=aa18990c882cc815ef226c7b1ae21bbb'
+  : 
+  'https://newsapi.org/v2/top-headlines?country=us&apiKey=ad3aa392a85b4007a3d4c225c5c6177e'
 
+  const { isLoading, error, data } = useQuery(API_KEY, () =>
+      fetch(TOP_ENDPOINT)
+     .then(res => res.json()
+    )
+
+    
+);
 
 
   if (isLoading) return <p>Loading...</p>;
 
   if (error) return <p>An error has occurred: {error.message}</p>;
 
-  const { articles } = data;
 
-  const fil_art = articles.filter((article) => article.urlToImage);
+  const {articles} =  data;
+
+  const fil_articles = articles.filter((obj) => obj.title != "[Removed]" )
+  
 
   return (
     <Container className='p-0 bg_main' fluid>
@@ -51,11 +60,11 @@ function App() {
           <Container className='p-0 vh-100'>
 
             <Container as={Button} variant="transparent" className='py-4 border-bottom bg_main rounded-0' fluid >
-              <Card as={Button} href={articles[0].url} className='shadow p-0 text-center rounded-0 border-0' variant="light">
+              <Card as={Button} href={fil_articles[0].url} className='shadow p-0 text-center rounded-0 border-0' variant="light">
 
-                {articles[0].urlToImage && articles[0].urlToImage !== "None" && (
+                {fil_articles[0].image && fil_articles[0].image !== "None" && (
 
-                  <Card.Img variant="top" className='rounded-0' src={articles[0].urlToImage} />
+                  <Card.Img variant="top" className='rounded-0' src={fil_articles[0].image} />
 
                 )}
                 <Card.Body className='py-3 dark bg-dark' >
@@ -66,11 +75,11 @@ function App() {
             </Container>
 
             <Container as={Button} variant="transparent" className='py-4 border-bottom bg_main rounded-0' fluid >
-              <Card as={Button} href={articles[7].url} className='shadow p-0 text-center rounded-0 border-0' variant="light">
+              <Card as={Button} href={fil_articles[7].url} className='shadow p-0 text-center rounded-0 border-0' variant="light">
 
-                {articles[7].urlToImage && articles[7].urlToImage !== "None" && (
+                {fil_articles[7].image && fil_articles[7].image !== "None" && (
 
-                  <Card.Img variant="top" className='rounded-0' src={articles[7].urlToImage} />
+                  <Card.Img variant="top" className='rounded-0' src={fil_articles[7].image} />
 
                 )}
                 <Card.Body className='py-3 dark bg-dark' >
@@ -132,10 +141,10 @@ function App() {
 
               </Col>
 
-              <NewsHeadBoard />
+              <NewsHeadBoard articles={fil_articles} />
 
               <Col className='px-0 pt-3'>
-                <Card bg='dark' text='white'>
+               {/* <Card bg='dark' text='white'>
                   <Card.Header >Quote</Card.Header>
                   <Card.Body>
                     <blockquote className="blockquote mb-0">
@@ -150,11 +159,14 @@ function App() {
                     </blockquote>
                   </Card.Body>
                 </Card>
+              */}
+
+              <SoloCard obj={articles[7]}/>
 
               </Col>
 
 
-              <NewsList articles={fil_art} />
+              <NewsList articles={fil_articles} />
 
 
             </Container>
