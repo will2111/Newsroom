@@ -1,185 +1,284 @@
 
-import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css';
 
-import { useQuery } from 'react-query';
+import { useState, useEffect } from 'react';
 
-import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 
-import { Button, Card} from 'react-bootstrap';
 
+import Nav_card from './components/Nav_card.js';
 import NewsHeadBoard from './components/NewsHeadBoard.js';
 import NewsList from './components/NewsList.js';
 import SoloCard from './components/SoloCard.js';
-import Switch_Api from './components/Switch_Api.js';
+import { ArrowBarLeft, ArrowRight, Newspaper, Twitter, Youtube } from 'react-bootstrap-icons';
+import Hover from './components/utils/Hover.js';
+import { Button } from 'react-bootstrap';
 
 
 function App() {
 
-  {/*
-    const { isLoading, error, data } = useQuery('aa18990c882cc815ef226c7b1ae21bbb', () =>
-    fetch('https://gnews.io/api/v4/top-headlines?category=general&lang=en&country=us&max=10&apikey=aa18990c882cc815ef226c7b1ae21bbb').then(res =>
-        res.json()
-    )
-  */}
- 
-  const API_KEY = Switch_Api() ? 'aa18990c882cc815ef226c7b1ae21bbb' : 'ad3aa392a85b4007a3d4c225c5c6177e'
-  const TOP_ENDPOINT = Switch_Api() ? 
-  'https://gnews.io/api/v4/top-headlines?category=general&lang=en&country=us&max=10&apikey=aa18990c882cc815ef226c7b1ae21bbb'
-  : 
-  'https://newsapi.org/v2/top-headlines?country=us&apiKey=ad3aa392a85b4007a3d4c225c5c6177e'
 
-  const { isLoading, error, data } = useQuery(API_KEY, () =>
-      fetch(TOP_ENDPOINT)
-     .then(res => res.json()
-    )
+  const [open, setOpen] = useState(false);
+  const [articles, setArticles] = useState([]);
+  const [youtube, setYoutube] = useState([])
 
-    
-);
+  // Using useEffect for single rendering
+
+  useEffect(() => {
+    // Using fetch to fetch the api from 
+    // flask server it will be redirected to proxy
+    fetch("http://192.168.1.24:5000/Articles").then((res) =>
+      res.json().then((data) => {
+        // Setting a data from api
+        const dupe = data
+        setArticles(dupe.reverse())
+
+      })
+    );
+
+    fetch("http://192.168.1.24:5000/Youtube").then((res) =>
+      res.json().then((data) => {
+        // Setting a data from api
+        const dupe = data
+        setYoutube(dupe.reverse())
+
+      })
+    );
+  }, []);
 
 
-  if (isLoading) return <p>Loading...</p>;
-
-  if (error) return <p>An error has occurred: {error.message}</p>;
-
-
-  const {articles} =  data;
-
-  const fil_articles = articles.filter((obj) => obj.title != "[Removed]" )
-  
 
   return (
-    <Container className='p-0 bg_main' fluid>
 
-      <Row className='g-0'>
+    articles.length > 0 && (
 
-        <Col className='p-0 shadow' xs={0} md={2} >
+      <Container className='p-0 bg_main' fluid>
 
-          <Container className='p-0 vh-100'>
+        <Container className='p-0 m-0' fluid>
 
-            <Container as={Button} variant="transparent" className='py-4 border-bottom bg_main rounded-0' fluid >
-              <Card as={Button} href={fil_articles[0].url} className='shadow p-0 text-center rounded-0 border-0' variant="light">
+          <Container className="p-0" style={{ zIndex: 0, position: "fixed", top: 0, width: "76%", height: "100%" }}>
+            <img style={{ width: "100%", height: "100%" }} src="https://st.depositphotos.com/1032463/1373/i/950/depositphotos_13732950-stock-photo-background-of-old-vintage-newspapers.jpg" class="img-fluid" alt="Responsive image"></img>
+            <Container className="p-0" style={{ position: "absolute", top: 0, width: "100%", height: "100%", backgroundColor: "rgba(0,0,0,0.6)" }} />
+          </Container>
 
-                {fil_articles[0].image && fil_articles[0].image !== "None" && (
 
-                  <Card.Img variant="top" className='rounded-0' src={fil_articles[0].image} />
+          <Container className='h-75 p-0 m-0' style={{ position: "relative", zIndex: 10 }} fluid >
 
-                )}
-                <Card.Body className='py-3 dark bg-dark' >
 
-                  <Card.Title className='text-white fs-4 fw-500 m-0' >{"Palestine"}</Card.Title>
-                </Card.Body>
-              </Card>
-            </Container>
+            <Col className='p-0 pb-4' md={9} >
 
-            <Container as={Button} variant="transparent" className='py-4 border-bottom bg_main rounded-0' fluid >
-              <Card as={Button} href={fil_articles[7].url} className='shadow p-0 text-center rounded-0 border-0' variant="light">
 
-                {fil_articles[7].image && fil_articles[7].image !== "None" && (
+              <Container className="vh-100 p-0" style={{ width: "100%", backgroundColor: "rgba(0,0,0,0)" }} >
 
-                  <Card.Img variant="top" className='rounded-0' src={fil_articles[7].image} />
 
-                )}
-                <Card.Body className='py-3 dark bg-dark' >
+                <Container className="p-0" style={{ height: "100%", zIndex: 10 }}>
 
-                  <Card.Title className='text-white fs-4 fw-500 m-0' >{"Congo"}</Card.Title>
-                </Card.Body>
-              </Card>
-            </Container>
+                  <Col style={{ display: "flex", width: "100%" }} className='p-0 px-4 mt-4'  >
+
+                    <Container className='p-0' style={{ display: "flex", flex: 1, alignItems: "center", justifyContent: "flex-start" }} >
+                      <Hover grow={"_button"}>
+                        <Row style={{ color: "#FFF", borderRadius: 4, borderWidth: 1.5, borderStyle: "solid", borderColor: "#FFF", alignSelf: "center" }} className='p-3 fit m-0 bor_2 bor_c'  >
+
+                          <Col className='p-0 me-2' md={"auto"}>
+                            <Youtube size={24} className='icon_color' />
+                          </Col>
+
+
+                          <Col className='p-0' md={"auto"}>
+                            <div className='p-0'>
+                              <h5 className='pb-0 m-0'>
+                                YouTube
+                              </h5>
+                            </div>
+                          </Col>
+
+                        </Row>
+                      </Hover>
+                    </Container>
+
+
+                    <Container className='p-0' style={{ display: "flex", flex: 1, alignItems: "center", justifyContent: "center" }} >
+                      <Hover grow={"_button"}>
+                        <Row style={{ backgroundColor: "#e9ecef" ,borderRadius: 4}} className='p-3 fit m-0 bor_2 bor_c'  >
+
+                          <Col className='p-0 me-2' md={"auto"}>
+                            <Newspaper size={24} />
+                          </Col>
+
+
+                          <Col style={{ alignContent: "center" }} className='p-0' md={"auto"}>
+                            <div className='p-0'>
+                              <h5 className='pb-0 fw-600 m-0'>
+                                NewsBoard
+                              </h5>
+                            </div>
+                          </Col>
+
+                        </Row>
+                      </Hover>
+                    </Container>
+
+
+
+                    <Container className='p-0' style={{ display: "flex", flex: 1, alignItems: "center", justifyContent: "flex-end" }} >
+
+                      <Hover grow={"_button"}>
+                        <Row style={{ color: "#FFF", borderRadius: 4, borderWidth: 1.5, borderStyle: "solid", borderColor: "#FFF" }} className='p-3 fit m-0 bor_2 bor_c'  >
+
+                          <Col className='p-0 me-2' md={"auto"}>
+                            <Twitter size={24} className='icon_color' />
+                          </Col>
+
+                          <Col style={{ alignContent: "center" }} className='p-0' md={"auto"}>
+                            <div className='p-0'>
+                              <h5 className='pb-0 m-0'>
+                                TwitTer
+                              </h5>
+                            </div>
+                          </Col>
+
+                        </Row>
+                      </Hover>
+
+                    </Container>
+
+
+                  </Col>
+
+
+
+                  <Container className='px-4 pb-3' style={{ height: "86%", overflow: "hidden", alignContent: "center", zIndex: 10 }}>
+
+                    <Container className='p-0' style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+
+                      <Col className='p-0' >
+                        <h2 style={{ color: "#FFF", textAlign: "center" }} >It's time to amplify</h2>
+                      </Col>
+
+                      <Col className='p-0 mb-3'>
+                        <h1 style={{ color: "#FFF", textAlign: "center" }} className='fw-600'>your online business</h1>
+                      </Col>
+
+                      <Col className='p-0' style={{ width: "80%", alignSelf: "100%" }}>
+                        <h5 style={{ color: "rgba(255,255,255,0.6)", textAlign: "center" }} >
+                          Raino is a HTML5 template based on Sass and Bootstrap 4 with modern and creative multipurpose design you can use it as a startups.
+                        </h5>
+                      </Col>
+
+                      <Col style={{ display: "flex", width: "32%" }} className='p-0 mt-4'  >
+
+                        <Container as={Button} onClick={()=>setOpen(!open)} className='p-0' style={{ display: "flex", flex: 1, alignItems: "center", justifyContent: "center",backgroundColor:"rgba(0,0,0,0)",borderWidth:0 }} >
+                          <Hover grow={"_button"}>
+                            <Row style={{ color: "#FFF", borderRadius: 4, borderWidth: 1.5, borderStyle: "solid", borderColor: "#FFF", alignSelf: "center" }} className='p-3 fit m-0 bor_2 bor_c'  >
+
+
+
+                              <Col className='p-0' md={"auto"}>
+                                <div className='p-0'>
+                                  <h6 className='pb-0 m-0'>
+                                    Open All
+                                  </h6>
+                                </div>
+                              </Col>
+
+
+                              <Col className='p-0 ms-3' md={"auto"}>
+                                <ArrowRight size={20} className='icon_color' />
+                              </Col>
+
+                            </Row>
+                          </Hover>
+                        </Container>
+
+
+                        <Container className='p-0' style={{ display: "flex", flex: 1, alignItems: "center", justifyContent: "center" }} >
+                          <Hover grow={"_button"}>
+                            <Row style={{ color: "#000", backgroundColor: "#e9ecef", borderRadius: 4, borderWidth: 1.5, borderStyle: "solid", borderColor: "#FFF", alignSelf: "center" }} className='p-3 fit m-0'  >
+
+                              <Col className='p-0' md={"auto"}>
+                                <div className='p-0'>
+                                  <h6 className='pb-0 fw-600 m-0'>
+                                    NewsBoard
+                                  </h6>
+                                </div>
+                              </Col>
+
+                              <Col className='p-0 ms-3' md={"auto"}>
+                                <ArrowRight size={20} />
+                              </Col>
+
+                            </Row>
+                          </Hover>
+                        </Container>
+
+                      </Col>
+
+                    </Container>
+
+
+                  </Container>
+
+
+                </Container>
+
+
+              </Container>
+
+
+
+              <Container className="px-0 pb-4" style={{ width: "100%", height: "100%", alignItems: "center" }} >
+                <SoloCard title={"Politics"} mode={"Articles"} open={open} data={{ "Articles": articles, "Youtube": youtube.filter((item)=>item.category == "Politics") }} />
+              </Container>
+
+              <Col style={{ width: "100%" }}>
+
+                <Container className='m-0 p-0' style={{ height: "86%", width: "100%", alignItems: "center" }} >
+                  <SoloCard title={"Technology"} mode={"Youtube"} open={open} data={{ "Articles": articles.filter((item)=>item.category == "Technology").slice(5, 10), "Youtube": youtube.filter((item)=>item.category == "Technology").slice(5, 10) }} />
+                </Container>
+
+              </Col>
+
+
+              <Col className='px-4'>
+                <NewsList title={"Entertaiment"} articles={articles} open={open} nbline={3} />
+              </Col>
+
+              <Col className='px-4'>
+                <NewsList title={"Health"} articles={articles} open={open}  nbline={3} />
+              </Col>
+
+
+            </Col>
+
+
+
+
+            <Col style={{ position: "fixed", right: 0, maxWidth: "25%", borderLeftWidth: 3, borderLeftStyle: "solid", borderColor: "#FFF"  }} className='p-0 shadow' >
+
+              <Container className='p-0'>
+
+                <Nav_card articles={articles} />
+
+              </Container>
+
+            </Col>
+
 
           </Container>
 
-        </Col>
+        </Container >
 
+      </Container>
 
-        <Col>
-
-          <Container className='p-0'>
-
-            {/*<Navbar bg="border bor_bot_color bg_main" data-bs-theme="light">
-              <Container className='py-3 px-4' >
-                <div className='dark bg-dark px-2 me-3'>
-                  <h1 className='text-white m-0'>
-                    N
-                  </h1>
-                </div>
-                <Navbar.Brand className='fs-2 fw-bold me-4' href="#home">NewsBoard</Navbar.Brand>
-                <Navbar.Collapse id="basic-navbar-nav">
-                  <Nav justify className="me-auto">
-                    <NavButton name={"HOME"} />
-                    <NavButton name={"POLITICS"} />
-                    <NavButton name={"ECONOMY"} />
-                    <NavButton name={"SCIENCE"} />
-                  </Nav>
-                </Navbar.Collapse>
-              </Container>
-            </Navbar>*/}
-
-            <Container className='h-75 px-4' >
-
-              <Col className='px-0 pt-4' >
-
-                <Row className='p-0 justify-content-center'  >
-                  <Col className='pe-0' md={"auto"}>
-                    <div className='p-2 px-1'>
-                      <h1 className='display-5 m-0'>
-                        News
-                      </h1>
-                    </div>
-                  </Col>
-
-                  <Col className='p-0' md={"auto"}>
-                    <div className='dark bg-dark p-2 pl-1'>
-                      <h1 className='text-white display-5 m-0'>
-                        Board
-                      </h1>
-                    </div>
-                  </Col>
-                </Row>
-
-              </Col>
-
-              <NewsHeadBoard articles={fil_articles} />
-
-              <Col className='px-0 pt-3'>
-               {/* <Card bg='dark' text='white'>
-                  <Card.Header >Quote</Card.Header>
-                  <Card.Body>
-                    <blockquote className="blockquote mb-0">
-                      <p>
-                        {' '}
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
-                        posuere erat a ante.{' '}
-                      </p>
-                      <footer className="blockquote-footer">
-                        Someone famous in <cite title="Source Title">Source Title</cite>
-                      </footer>
-                    </blockquote>
-                  </Card.Body>
-                </Card>
-              */}
-
-              <SoloCard obj={articles[7]}/>
-
-              </Col>
-
-
-              <NewsList articles={fil_articles} />
-
-
-            </Container>
-
-          </Container >
-
-        </Col>
+    )
 
 
 
-      </Row>
 
-    </Container>
+
 
   );
 }

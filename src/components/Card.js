@@ -1,57 +1,73 @@
+import Collapse from 'react-bootstrap/Collapse';
+
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 
 import Moment from 'react-moment';
-import { Button } from 'react-bootstrap';
+import { Button, Fade } from 'react-bootstrap';
 
 import Switch_Api from './Switch_Api.js';
+import $ from 'jquery';
+import { useState } from 'react';
+import Hover from './utils/Hover.js';
+
+
 
 
 function NewsCard(props) {
 
-  const img = Switch_Api() ? props.obj.image : props.obj.urlToImage 
+  const img = Switch_Api() ? props.obj.image : props.obj.urlToImage
+
+
+  $(window).height(props.height)
+  $(window).width(props.width)
+
 
   return (
-    
 
-    <Card as={Button} href={props.obj.url} className='shadow p-0 text-start rounded-0 border-0' variant="light">
+    <Hover grow={""}>
 
-      {img && img !== "None"  && (
+      <Fade className="white" in={!props.open}>
+        <Card style={{ backgroundColor: "#fff" }} id={props.id ? props.id : "ToDEF"} as={Button} href={props.obj.url} className='shadow_card p-0 text-start rounded-0 border-0' variant="light">
 
-        <Card.Img variant="top" className='rounded-0' src={img} />
+          {img && img !== "None" && (
 
-      )}
+            <Card.Img variant="top" className='rounded-0' src={img} />
 
-      <Card.Body>
+          )}
 
-        <Card.Title className='noticia fs-4 py-1' >{props.obj.title}</Card.Title>
+          <Card.Body>
 
-        <Card.Text className='crop-text-2' >
-          {props.obj.description}
-        </Card.Text>
+            <Card.Title className='fs-4 py-1' >{props.obj.title.toUpperCase()}</Card.Title>
 
-        <Row >
-
-          <Col md="auto">
-            <Card.Text className='fw-600'>
-              {props.obj.source.name}
+            <Card.Text className='crop-text-2' >
+              {props.obj.description}
             </Card.Text>
-          </Col>
 
-          <Col md="auto" className="vl p-0" />
+            <Row >
 
-          <Col md="auto">
-            <Card.Text >
-              <Moment date={props.obj.publishedAt} format="D MMMM YYYY"/>
-            </Card.Text>
-          </Col>
+              <Col md="auto">
+                <Card.Text className='fw-600'>
+                  {props.obj.source}
+                </Card.Text>
+              </Col>
 
-        </Row>
+              <Col md="auto" className="vl p-0" />
 
-      </Card.Body>
+              <Col md="auto">
+                <Card.Text >
+                  <Moment date={props.obj.PublishedAt} format="D MMMM YYYY" />
+                </Card.Text>
+              </Col>
 
-    </Card>
+            </Row>
+
+          </Card.Body>
+
+        </Card>
+      </Fade>
+    </Hover>
 
 
   )
